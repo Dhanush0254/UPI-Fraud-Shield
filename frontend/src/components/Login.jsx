@@ -7,6 +7,7 @@ import { API } from '../config';
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -44,7 +45,22 @@ const Login = ({ onLogin }) => {
         </div>
         <div className="form-group">
           <label className="form-label">Password</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
+          <div className="password-input-wrapper">
+            <input 
+              type={showPassword ? "text" : "password"} 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              placeholder="••••••••" 
+            />
+            <button 
+              type="button" 
+              className="password-toggle-btn"
+              onClick={() => setShowPassword(!showPassword)}
+              title={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? "🙈" : "👁️"}
+            </button>
+          </div>
         </div>
         <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
           {loading ? '⏳ Signing in...' : '🔐 Sign In'}
