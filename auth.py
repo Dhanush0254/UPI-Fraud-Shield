@@ -47,10 +47,9 @@ def add_user(username, email, password):
     if email and users_table.find_one({"email": email}):
         return None, "Email already registered"
     
-    # Store None instead of empty string so sparse unique index works
+    # Build user document. If email is empty, omit it so sparse unique index ignores it
     user_doc = {
         "username": username,
-        "email": email if email else None,
         "password": hash_password(password),
         "role": "user",  # "user" or "admin"
         "credibility_score": 1.0,
@@ -59,6 +58,9 @@ def add_user(username, email, password):
         "total_complaints": 0,
         "created_at": datetime.datetime.utcnow()
     }
+    
+    if email:
+        user_doc["email"] = email
     result = users_table.insert_one(user_doc)
     user_doc["_id"] = result.inserted_id
     return user_doc, None
